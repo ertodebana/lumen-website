@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lumen: not a blazingly fast language</title>
+<meta name="description" content="Lumen is a small, dynamically typed programming language with closures, first-class functions and errors that name the line. It is not fast.">
+<meta property="og:title" content="Lumen: not a blazingly fast language">
+<meta property="og:description" content="A small, dynamically typed language with closures and honest benchmarks.">
+<meta name="theme-color" content="#e7edf5">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230e1a2b'/%3E%3Ccircle cx='16' cy='16' r='7' fill='%23f0a020'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,300..800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<script type="importmap">
+{ "imports": {
+    "three": "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js",
+    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/"
+} }
+</script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="top">
+  <a class="mark" href="/" aria-label="Lumen home">lumen</a>
+  <nav aria-label="Main">
+    <a href="https://ertodebana.github.io/lumen/">Docs</a>
+    <a href="https://ertodebana.github.io/lumen/Lumen-Handbook.pdf">Handbook</a>
+    <a href="https://github.com/ertodebana/lumen">GitHub</a>
+  </nav>
+</header>
+
+<main id="main">
+
+<section class="hero">
+  <div class="hero-copy">
+    <h1>Not a blazingly fast language.</h1>
+    <p class="lede">Lumen is a small, dynamically typed language with closures,
+    first-class functions and errors that name the line. It computes
+    <code>fib(30)</code> in 0.64 seconds. Python does it in 0.08.</p>
+    <div class="actions">
+      <a class="btn solid" href="https://ertodebana.github.io/lumen/">Read the docs</a>
+      <a class="btn" href="https://github.com/ertodebana/lumen">Get the source</a>
+    </div>
+  </div>
+
+  <div class="pad">
+    <canvas id="rocket" role="img" aria-label="A 3D rocket standing on its launch pad"></canvas>
+    <div class="control">
+      <button id="launch" type="button">Attempt launch</button>
+      <p id="status" aria-live="polite">On the pad. No hurry.</p>
+    </div>
+  </div>
+</section>
+
+<section class="bench" aria-labelledby="bench-title">
+  <div class="wrap">
+    <h2 id="bench-title">We measured. It came last.</h2>
+    <p class="intro">Recursive <code>fib(30)</code>, wall time including start-up, best of
+    five runs on one laptop.</p>
+
+    <dl class="bars">
+      <div class="row">
+        <dt>Rust <span>compiled, 1.99</span></dt>
+        <dd><span class="bar" style="--w: 0.63%"></span><b>0.004 s</b></dd>
+      </div>
+      <div class="row">
+        <dt>JavaScript <span>Node 22</span></dt>
+        <dd><span class="bar" style="--w: 7.4%"></span><b>0.047 s</b></dd>
+      </div>
+      <div class="row">
+        <dt>Python <span>3.14</span></dt>
+        <dd><span class="bar" style="--w: 13.2%"></span><b>0.084 s</b></dd>
+      </div>
+      <div class="row lumen">
+        <dt>Lumen <span>0.2</span></dt>
+        <dd><span class="bar" style="--w: 100%"></span><b>0.637 s</b></dd>
+      </div>
+    </dl>
+
+    <p class="why">Lumen walks the syntax tree on every call and looks each variable up
+    in a hash map. That is the simplest way to build an interpreter and the slowest way
+    to run one. Here it is about eight times slower than Python, and about a hundred and
+    sixty times slower than the Rust it is written in.</p>
+    <p class="fine">Intel Core i7-13700H, Linux. One benchmark, one machine: treat it as
+    an anecdote.</p>
+  </div>
+</section>
+
+<section class="instead" aria-labelledby="instead-title">
+  <div class="wrap two">
+    <div>
+      <h2 id="instead-title">What you get instead</h2>
+      <ul class="claims">
+        <li><strong>A language that fits in your head.</strong> Thirteen keywords and two
+        built-in functions. The whole syntax is one page of the handbook.</li>
+        <li><strong>Functions that remember.</strong> Closures and first-class functions
+        are the only way to build anything larger, so they work properly.</li>
+        <li><strong>Errors that name the line.</strong> Every failure says what went wrong
+        and where, then stops.</li>
+        <li><strong>A prompt that keeps your work.</strong> Multi-line blocks, history,
+        and results echoed back as you type.</li>
+      </ul>
+    </div>
+
+    <figure class="code">
+      <figcaption>counter.lm</figcaption>
+<pre><code><span class="k">fn</span> <span class="f">make_counter</span>() {
+    <span class="k">let</span> count = <span class="n">0</span>
+    <span class="k">return fn</span>() {
+        count = count + <span class="n">1</span>
+        <span class="k">return</span> count
+    }
+}
+
+<span class="k">let</span> a = <span class="f">make_counter</span>()
+<span class="k">let</span> b = <span class="f">make_counter</span>()
+<span class="f">a</span>()
+<span class="f">a</span>()
+<span class="k">print</span> <span class="s">"a: "</span> + <span class="f">a</span>()
+<span class="k">print</span> <span class="s">"b: "</span> + <span class="f">b</span>()</code></pre>
+<pre class="out"><code>a: 3
+b: 1</code></pre>
+    </figure>
+  </div>
+</section>
+
+<section class="start" aria-labelledby="start-title">
+  <div class="wrap two">
+    <div>
+      <h2 id="start-title">Try it</h2>
+      <p>Lumen builds to one native executable. You need a Rust toolchain; nothing else.</p>
+      <p class="links">
+        <a href="https://ertodebana.github.io/lumen/">Documentation</a>
+        <a href="https://ertodebana.github.io/lumen/Lumen-Handbook.pdf">Handbook, 45 pages (PDF)</a>
+        <a href="https://github.com/ertodebana/lumen">Source on GitHub</a>
+      </p>
+    </div>
+    <figure class="code">
+      <figcaption>Terminal</figcaption>
+<pre><code><span class="p">$</span> git clone https://github.com/ertodebana/lumen
+<span class="p">$</span> cd lumen
+<span class="p">$</span> cargo install --path .
+<span class="p">$</span> lumen
+<span class="c">Lumen 0.2.0 (linux x86_64)
+Ctrl-D to exit.</span>
+<span class="p">&gt;</span> <span class="k">print</span> <span class="s">"hello"</span>
+<span class="c">hello</span></code></pre>
+    </figure>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <p>Lumen is written in Rust and takes its time.</p>
+    <p>Rocket model by <a href="https://poly.pizza/m/9awwTQWYux">hat_my_guy</a>, public
+    domain (CC0), from Poly Pizza. Rendered with three.js.</p>
+  </div>
+</footer>
+
+<script type="module" src="main.js"></script>
+</body>
+</html>

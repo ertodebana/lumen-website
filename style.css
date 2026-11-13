@@ -1,0 +1,208 @@
+/* Palette taken from the rocket itself: daylight sky, navy band, red legs,
+   plus the amber "lumen" from the handbook. */
+:root {
+  --sky: #e7edf5;
+  --sky-deep: #d5deea;
+  --ink: #0e1a2b;
+  --slate: #46546a;
+  --navy: #17486b;
+  --amber: #f0a020;
+  --amber-ink: #8a5200;
+  --red: #b3231a;
+  --panel: #0f1828;
+  --panel-text: #e6ebf3;
+  --line: #b9c5d6;
+
+  --display: "Bricolage Grotesque", "Helvetica Neue", Arial, sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
+
+  --gutter: clamp(1.25rem, 5vw, 4.5rem);
+  --measure: 62ch;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+
+body {
+  margin: 0;
+  background: var(--sky);
+  color: var(--ink);
+  font-family: var(--display);
+  font-size: clamp(1.02rem, 0.96rem + 0.3vw, 1.2rem);
+  line-height: 1.55;
+  font-optical-sizing: auto;
+  -webkit-font-smoothing: antialiased;
+}
+
+a { color: inherit; text-decoration-thickness: 0.08em; text-underline-offset: 0.2em; }
+a:hover { text-decoration-color: var(--amber); }
+:focus-visible { outline: 3px solid var(--navy); outline-offset: 3px; border-radius: 4px; }
+
+code, pre { font-family: var(--mono); font-variant-ligatures: none; }
+p code {
+  font-size: 0.86em; padding: 0.12em 0.4em; border-radius: 0.3em;
+  background: rgba(14, 26, 43, 0.08);
+}
+
+.skip {
+  position: absolute; left: var(--gutter); top: -4rem; z-index: 10;
+  padding: 0.6rem 1rem; background: var(--ink); color: var(--sky); border-radius: 0.5rem;
+}
+.skip:focus { top: 0.75rem; }
+
+.wrap { max-width: 82rem; margin-inline: auto; padding-inline: var(--gutter); }
+
+/* ---------- top bar ---------- */
+.top {
+  display: flex; align-items: baseline; justify-content: space-between; gap: 1rem;
+  padding: 1.5rem var(--gutter) 0;
+  max-width: 96rem; margin-inline: auto;
+}
+.mark {
+  font-size: 1.5rem; font-weight: 300; letter-spacing: -0.04em; text-decoration: none;
+}
+.top nav { display: flex; gap: clamp(1rem, 3vw, 2.25rem); font-size: 0.98rem; font-weight: 500; }
+.top nav a { text-decoration: none; padding-block: 0.3rem; border-bottom: 2px solid transparent; }
+.top nav a:hover { border-bottom-color: var(--amber); }
+
+/* ---------- hero ---------- */
+.hero {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1.35fr) minmax(0, 0.65fr);
+  align-items: end;
+  gap: 1rem;
+  max-width: 96rem; margin-inline: auto;
+  padding: 0 var(--gutter);
+  min-height: min(52rem, calc(100svh - 4.5rem));
+  /* the ground the rocket stands on */
+  border-bottom: 2px solid var(--ink);
+}
+.hero-copy { padding-block: clamp(3rem, 9vh, 7rem) clamp(3rem, 8vh, 6rem); align-self: center; }
+
+h1 {
+  margin: 0;
+  font-size: clamp(3.1rem, 1rem + 9.2vw, 9.2rem);
+  font-weight: 800;
+  font-variation-settings: "opsz" 96;
+  line-height: 0.9;
+  letter-spacing: -0.045em;
+  text-wrap: balance;
+  max-width: 9.5ch;
+}
+.lede {
+  margin: clamp(1.5rem, 4vh, 2.75rem) 0 0;
+  max-width: 34rem;
+  font-size: clamp(1.1rem, 1rem + 0.5vw, 1.4rem);
+  line-height: 1.45;
+  color: var(--slate);
+}
+.actions { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: clamp(1.5rem, 4vh, 2.5rem); }
+.btn {
+  display: inline-block; padding: 0.85rem 1.4rem; border-radius: 999px;
+  border: 2px solid var(--ink); text-decoration: none; font-weight: 600; font-size: 1rem;
+  transition: background-color 0.15s, color 0.15s;
+}
+.btn:hover { background: var(--ink); color: var(--sky); }
+.btn.solid { background: var(--ink); color: var(--sky); }
+.btn.solid:hover { background: var(--navy); border-color: var(--navy); }
+
+.pad { position: relative; align-self: stretch; min-height: 26rem; }
+#rocket { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.control {
+  position: absolute; right: 0; top: clamp(1.5rem, 9vh, 5rem); z-index: 2;
+  display: flex; flex-direction: column; align-items: flex-end; gap: 0.5rem; text-align: right;
+  max-width: 13rem;
+}
+#launch {
+  font: 600 0.92rem var(--display); color: var(--ink);
+  padding: 0.6rem 1.05rem; border-radius: 999px; cursor: pointer;
+  background: var(--amber); border: 2px solid var(--ink);
+  transition: transform 0.12s;
+}
+#launch:hover { transform: translateY(-1px); }
+#launch:active { transform: translateY(1px); }
+#launch[disabled] { cursor: progress; opacity: 0.65; transform: none; }
+#status {
+  margin: 0; font: 400 0.8rem/1.4 var(--mono); color: var(--slate); min-height: 2.8em;
+}
+
+/* ---------- sections ---------- */
+section h2 {
+  margin: 0 0 1.25rem;
+  font-size: clamp(2rem, 1.2rem + 3.4vw, 4.2rem);
+  font-weight: 700; line-height: 1; letter-spacing: -0.035em; text-wrap: balance;
+}
+.bench, .instead, .start { padding-block: clamp(4rem, 11vh, 8rem); }
+.two { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: clamp(2rem, 6vw, 6rem); align-items: start; }
+
+/* benchmark */
+.bench .intro { max-width: var(--measure); color: var(--slate); margin: 0 0 2.5rem; }
+.bars { margin: 0; display: grid; gap: 1.1rem; }
+.row { display: grid; grid-template-columns: minmax(8.5rem, 13rem) minmax(0, 1fr); align-items: center; gap: 1rem; }
+.row dt { font-weight: 600; }
+.row dt span { display: block; font-weight: 400; font-size: 0.82em; color: var(--slate); }
+.row dd { margin: 0; display: flex; align-items: center; gap: 0.9rem; min-width: 0; }
+.bar {
+  flex: 0 0 auto; width: calc(var(--w) * 0.82); min-width: 3px; height: 1.6rem;
+  background: var(--navy); border-radius: 2px;
+}
+.row b { font: 500 0.92rem var(--mono); white-space: nowrap; }
+.row.lumen .bar { background: var(--amber); height: 2.6rem; }
+.row.lumen dt, .row.lumen b { font-size: 1.15em; }
+.why { max-width: var(--measure); margin: 3rem 0 0; font-size: 1.08em; }
+.fine { max-width: var(--measure); margin: 0.9rem 0 0; font-size: 0.86em; color: var(--slate); }
+
+/* what you get instead */
+.instead { background: var(--sky-deep); }
+.claims { list-style: none; margin: 2rem 0 0; padding: 0; display: grid; gap: 1.4rem; max-width: 36rem; }
+.claims li { padding-left: 1.25rem; border-left: 3px solid var(--amber); color: var(--slate); }
+.claims strong { display: block; color: var(--ink); font-weight: 700; font-size: 1.1em; margin-bottom: 0.15rem; }
+
+/* code panels */
+figure.code {
+  margin: 0; background: var(--panel); color: var(--panel-text);
+  border-radius: 0.9rem; overflow: hidden;
+  box-shadow: 0 1.5rem 3rem -1.5rem rgba(14, 26, 43, 0.45);
+}
+figure.code figcaption {
+  padding: 0.7rem 1.4rem; font: 500 0.78rem var(--mono); color: #93a1b8;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.09);
+}
+figure.code pre {
+  margin: 0; padding: 1.2rem 1.4rem; overflow-x: auto;
+  font-size: clamp(0.78rem, 0.72rem + 0.25vw, 0.92rem); line-height: 1.65; tab-size: 4;
+}
+figure.code pre.out { background: #17233a; border-top: 1px solid rgba(255, 255, 255, 0.09); color: #ffd58a; }
+.k { color: #ffb648; }
+.s { color: #a9dba0; }
+.n { color: #8fcaf8; }
+.f { color: #cdbdf6; }
+.c { color: #93a1b8; }
+.p { color: var(--amber); }
+
+/* try it */
+.start p { max-width: 32rem; color: var(--slate); }
+.links { display: grid; gap: 0.6rem; margin-top: 1.75rem; font-weight: 600; }
+.links a { color: var(--ink); width: fit-content; }
+
+footer { border-top: 2px solid var(--ink); padding-block: 2rem 3rem; font-size: 0.88rem; color: var(--slate); }
+footer p { margin: 0 0 0.35rem; }
+
+/* ---------- small screens ---------- */
+@media (max-width: 56rem) {
+  .hero { grid-template-columns: minmax(0, 1fr); min-height: 0; gap: 0; }
+  .hero-copy { padding-block: 2.5rem 0.5rem; }
+  h1 { max-width: none; }
+  .pad { min-height: 21rem; height: 46svh; }
+  .control { top: 0.5rem; }
+  .two { grid-template-columns: minmax(0, 1fr); }
+  .row { grid-template-columns: minmax(0, 1fr); gap: 0.3rem; }
+  .row dt span { display: inline; margin-left: 0.4em; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  * { transition: none !important; }
+}
